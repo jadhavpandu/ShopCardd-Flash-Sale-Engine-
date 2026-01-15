@@ -59,3 +59,25 @@ const discoveryValidators = [
   
   handleValidationErrors
 ];
+
+// Claim Deal Validators
+const claimDealValidators = [
+  param('deal_id')
+    .notEmpty().withMessage('Deal ID is required')
+    .isMongoId().withMessage('Invalid Deal ID format'),
+  
+  body('user_id')
+    .notEmpty().withMessage('User ID is required')
+    .isString().withMessage('User ID must be a string')
+    .trim()
+    .isLength({ min: 3, max: 100 }).withMessage('User ID must be between 3-100 characters'),
+  
+  handleValidationErrors
+];
+
+module.exports = {
+  createDealValidators,
+  discoveryValidators,
+  claimDealValidators,
+  handleValidationErrors
+};
