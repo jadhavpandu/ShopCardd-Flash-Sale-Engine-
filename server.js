@@ -1,12 +1,21 @@
+require("dotenv").config();
 const express = require("express");
+const {connectDB} = require("./database");
+
 
 const app = express();
 //Converts JSON request body into JavaScript object (req.body)
 app.use(express.json());
 
-app.use("/home",(req,res)=>{
-    res.send("this is the jsut for check");
+app.get("/home",(req,res)=>{
+    res.send("this is the jsut for check server on 4000");
 })
-app.listen(3000,(req,res)=>{
+connectDB();
+app.listen(4000,(req,res)=>{
     console.log("listen at port 3000");
 })
+
+
+
+
+
