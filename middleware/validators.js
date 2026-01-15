@@ -41,3 +41,21 @@ const createDealValidators = [
   
   handleValidationErrors
 ];
+
+// Discovery Validators
+const discoveryValidators = [
+  query('lat')
+    .notEmpty().withMessage('Latitude is required')
+    .isFloat({ min: -90, max: 90 }).withMessage('Latitude must be between -90 and 90'),
+  
+  query('long')
+    .notEmpty().withMessage('Longitude is required')
+    .isFloat({ min: -180, max: 180 }).withMessage('Longitude must be between -180 and 180'),
+  
+  query('radius')
+    .optional()
+    .isInt({ min: 1, max: 50 }).withMessage('Radius must be between 1-50 km')
+    .toInt(),
+  
+  handleValidationErrors
+];
