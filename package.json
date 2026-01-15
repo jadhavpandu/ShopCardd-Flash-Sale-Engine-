@@ -1,0 +1,26 @@
+{
+  "name": "shopcardd-flash-sale-engine-",
+  "version": "1.0.0",
+  "description": "A high-performance, geolocation-aware flash sale system built with Node.js, Express, MongoDB, and Redis.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jadhavpandu/ShopCardd-Flash-Sale-Engine-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jadhavpandu/ShopCardd-Flash-Sale-Engine-/issues"
+  },
+  "homepage": "https://github.com/jadhavpandu/ShopCardd-Flash-Sale-Engine-#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11"
+  }
+}
