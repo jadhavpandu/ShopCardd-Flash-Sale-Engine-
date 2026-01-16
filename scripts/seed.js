@@ -69,21 +69,21 @@ const sampleDeals = [
 async function seed() {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✅ Connected to MongoDB');
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/flash-sale');
+    console.log('Connected to MongoDB');
 
     // Clear existing data
     await Deal.deleteMany({});
     await Claim.deleteMany({});
-    console.log('🗑️  Cleared existing data');
+    console.log('Cleared existing data');
 
     // Flush Redis
     await redis.flushdb();
-    console.log('🗑️  Cleared Redis cache');
+    console.log('Cleared Redis cache');
 
     // Insert deals
     const deals = await Deal.insertMany(sampleDeals);
-    console.log(`✅ Inserted ${deals.length} deals`);
+    console.log(`Inserted ${deals.length} deals`);
 
     // Cache active deals in Redis
     let cachedCount = 0;
@@ -113,36 +113,36 @@ async function seed() {
         cachedCount++;
       }
     }
-    console.log(`✅ Cached ${cachedCount} active deals in Redis`);
+    console.log(`Cached ${cachedCount} active deals in Redis`);
 
     // Summary
     const activeDeals = deals.filter(d => d.valid_until > new Date());
     const expiredDeals = deals.filter(d => d.valid_until <= new Date());
 
-    console.log('\n📊 Seed Summary:');
+    console.log('\n Seed Summary:');
     console.log('================');
     console.log(`Total Deals: ${deals.length}`);
     console.log(`Active Deals: ${activeDeals.length}`);
     console.log(`Expired Deals: ${expiredDeals.length}`);
 
-    console.log('\n📍 Active Deals:');
+    console.log('\nActive Deals:');
     activeDeals.forEach(d => {
       const [lng, lat] = d.location.coordinates;
-      console.log(`  🟢 ${d.title}`);
+      console.log(`  ${d.title}`);
       console.log(`     Location: ${lat.toFixed(4)}°N, ${lng.toFixed(4)}°E`);
       console.log(`     Inventory: ${d.inventory_remaining}/${d.total_vouchers}`);
     });
 
-    console.log('\n✨ Seeding completed successfully!');
-    console.log('\n🚀 Test the API:');
+    console.log('\nSeeding completed successfully!');
+    console.log('\n Test the API:');
     console.log('   curl "http://localhost:3000/api/deals?lat=19.0760&long=72.8777&radius=5"');
 
   } catch (error) {
-    console.error('❌ Seeding error:', error);
+    console.error('Seeding error:', error);
   } finally {
     await mongoose.connection.close();
     redis.disconnect();
-    console.log('\n👋 Disconnected from databases');
+    console.log('\n Disconnected from databases');
   }
 }
 
