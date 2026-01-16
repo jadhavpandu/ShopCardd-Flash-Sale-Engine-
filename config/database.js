@@ -13,15 +13,15 @@ const connectDB = async () => {
 
     await mongoose.connect(process.env.MONGODB_URI, options);
     
-    console.log('✅ MongoDB connected successfully');
+    console.log('MongoDB connected successfully');
     
     // Connection event listeners
     mongoose.connection.on('error', (err) => {
-      console.error('❌ MongoDB connection error:', err);
+      console.error('MongoDB connection error:', err);
     });
 
     mongoose.connection.on('disconnected', () => {
-      console.warn('⚠️  MongoDB disconnected');
+      console.warn('MongoDB disconnected');
     });
 
     mongoose.connection.on('reconnected', () => {
@@ -29,7 +29,7 @@ const connectDB = async () => {
     });
 
   } catch (error) {
-    console.error('❌ MongoDB connection failed:', error);
+    console.error('MongoDB connection failed:', error);
     process.exit(1);
   }
 };
