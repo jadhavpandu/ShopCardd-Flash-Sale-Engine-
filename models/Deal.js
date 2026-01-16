@@ -1,10 +1,11 @@
 // models/Deal.js - Deal Schema with Geospatial Index
-// adding the schema using mongoose
-
-
 const mongoose = require('mongoose');
 
 const dealSchema = new mongoose.Schema({
+  deal_id: {
+    type: String,
+    index: true
+  },
   merchant_id: {
     type: String,
     required: [true, 'Merchant ID is required'],
@@ -37,13 +38,7 @@ const dealSchema = new mongoose.Schema({
   },
   valid_until: {
     type: Date,
-    required: [true, 'Expiration date is required'],
-    validate: {
-      validator: function(value) {
-        return value > new Date();
-      },
-      message: 'Expiration date must be in the future'
-    }
+    required: [true, 'Expiration date is required']
   },
   location: {
     type: {
@@ -83,14 +78,6 @@ dealSchema.index({ inventory_remaining: 1, valid_until: 1 });
 // Virtual for checking if deal is active
 dealSchema.virtual('is_active').get(function() {
   return this.valid_until > new Date() && this.inventory_remaining > 0;
-});
-
-// Pre-save validation
-dealSchema.pre('save', function(next) {
-  if (this.inventory_remaining > this.total_vouchers) {
-    next(new Error('Inventory remaining cannot exceed total vouchers'));
-  }
-  next();
 });
 
 // Static method to find active deals
