@@ -266,5 +266,9 @@ This confirms Redis is actively used for concurrency control and caching.
 ## api for region to check delas
 <img width="1920" height="1080" alt="health" src="https://github.com/user-attachments/assets/d7474c0e-30d7-42a6-a944-d852eab3d54e" />
 
+## api to claim dela
+<img width="1920" height="1080" alt="Claim" src="https://github.com/user-attachments/assets/b7ec3d66-56ea-494e-9a9c-6f10ba860bcf" />
+
+
 
 
