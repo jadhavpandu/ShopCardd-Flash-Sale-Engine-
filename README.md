@@ -257,6 +257,7 @@ This confirms Redis is actively used for concurrency control and caching.
 ✔ Expiry & sold-out logic validated
 
 ---
+## api_deal
 <img width="1920" height="1080" alt="health" src="https://github.com/user-attachments/assets/05c12c43-756e-4e6e-a981-6673a0fa3285" />
 
 
