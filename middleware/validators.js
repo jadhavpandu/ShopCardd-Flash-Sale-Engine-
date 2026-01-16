@@ -1,4 +1,3 @@
-
 // middleware/validators.js - Input Validation Rules
 const { body, param, query, validationResult } = require('express-validator');
 
@@ -18,10 +17,10 @@ const handleValidationErrors = (req, res, next) => {
     });
   }
   
-  next();
+  return next();
 };
 
-// creating the Deal Validators
+// Create Deal Validators
 const createDealValidators = [
   body('merchant_id')
     .notEmpty().withMessage('Merchant ID is required')
@@ -44,7 +43,10 @@ const createDealValidators = [
     .isISO8601().withMessage('Invalid date format (use ISO 8601)')
     .custom((value) => {
       const expiryDate = new Date(value);
-      if (expiryDate <= new Date()) {
+      const now = new Date();
+      // Add 1 minute buffer to account for time differences
+      now.setMinutes(now.getMinutes() - 1);
+      if (expiryDate <= now) {
         throw new Error('Expiration date must be in the future');
       }
       return true;

@@ -1,6 +1,5 @@
 // models/Claim.js - Claim Schema with Voucher Generation
 const mongoose = require('mongoose');
-//to generate a secure, random, unique voucher code.
 const crypto = require('crypto');
 
 const claimSchema = new mongoose.Schema({
@@ -96,14 +95,6 @@ claimSchema.methods.redeem = async function() {
   
   return this;
 };
-
-// Pre-save hook to check expiration
-claimSchema.pre('save', function(next) {
-  if (this.expires_at < new Date() && this.status === 'active') {
-    this.status = 'expired';
-  }
-  next();
-});
 
 // Virtual to check if voucher is valid
 claimSchema.virtual('is_valid').get(function() {
