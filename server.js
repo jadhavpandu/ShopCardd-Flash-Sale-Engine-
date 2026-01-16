@@ -22,6 +22,40 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/api', dealRoutes);
 
+// Redis test endpoint
+app.get('/test-redis', async (req, res) => {
+  const redis = require('./config/redis');
+  
+  try {
+    const ping = await redis.ping();
+    await redis.set('test-key', 'Hello from Redis!', 'EX', 60);
+    const value = await redis.get('test-key');
+    const keys = await redis.keys('*');
+    
+    res.json({
+      status: 'success',
+      redis_connected: true,
+      ping: ping,
+      test_write: 'test-key created',
+      test_read: value,
+      total_keys: keys.length,
+      all_keys: keys.slice(0, 10),
+      redis_config: {
+        using: process.env.REDIS_URL ? 'REDIS_URL' : 'REDIS_HOST/PORT',
+        host: process.env.REDIS_URL ? 
+          process.env.REDIS_URL.split('@')[1]?.split(':')[0] : 
+          process.env.REDIS_HOST || 'localhost'
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      redis_connected: false,
+      error: error.message,
+      redis_url: process.env.REDIS_URL || 'Not set'
+    });
+  }
+});
 
 // 404 handler
 app.use((req, res) => {
@@ -43,23 +77,22 @@ app.use((err, req, res, next) => {
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log('✅ Connected to MongoDB');
     
-    // Start server only after DB connection
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
-      console.log(`Flash Sale Engine running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🚀 Flash Sale Engine running on port ${PORT}`);
+      console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   })
   .catch((error) => {
-    console.error('MongoDB connection error:', error);
+    console.error('❌ MongoDB connection error:', error);
     process.exit(1);
   });
 
 // Graceful shutdown
 process.on('SIGTERM', async () => {
-  console.log('SIGTERM received, shutting down gracefully...');
+  console.log('⚠️  SIGTERM received, shutting down gracefully...');
   await mongoose.connection.close();
   process.exit(0);
 });
