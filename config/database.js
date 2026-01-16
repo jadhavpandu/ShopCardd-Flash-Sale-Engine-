@@ -25,7 +25,7 @@ const connectDB = async () => {
     });
 
     mongoose.connection.on('reconnected', () => {
-      console.log('✅ MongoDB reconnected');
+      console.log('MongoDB reconnected');
     });
 
   } catch (error) {
