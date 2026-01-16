@@ -276,6 +276,14 @@ This confirms Redis is actively used for concurrency control and caching.
 ## claim database image
 <img width="1920" height="1080" alt="claim" src="https://github.com/user-attachments/assets/57445d72-a58f-4bcf-805c-6f13fbdf8688" />
 
+## Redis database setup
+<img width="1784" height="974" alt="Redis_coonection sting" src="https://github.com/user-attachments/assets/9ef1df4b-7db7-42d9-b097-dae658dca744" />
+## redis-cli desktop
+<img width="1920" height="1080" alt="Rediscli desktop" src="https://github.com/user-attachments/assets/739c05fb-9268-46bb-8a83-81413a625a86" />
+
+
+
+
 
 
 
