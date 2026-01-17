@@ -1,7 +1,5 @@
-// middleware/validators.js - Input Validation Rules
 const { body, param, query, validationResult } = require('express-validator');
 
-// Validation error handler middleware
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   
@@ -20,7 +18,7 @@ const handleValidationErrors = (req, res, next) => {
   return next();
 };
 
-// Create Deal Validators
+
 const createDealValidators = [
   body('merchant_id')
     .notEmpty().withMessage('Merchant ID is required')
@@ -44,7 +42,7 @@ const createDealValidators = [
     .custom((value) => {
       const expiryDate = new Date(value);
       const now = new Date();
-      // Add 1 minute buffer to account for time differences
+     
       now.setMinutes(now.getMinutes() - 1);
       if (expiryDate <= now) {
         throw new Error('Expiration date must be in the future');
@@ -63,7 +61,6 @@ const createDealValidators = [
   handleValidationErrors
 ];
 
-// Discovery Validators
 const discoveryValidators = [
   query('lat')
     .notEmpty().withMessage('Latitude is required')
@@ -81,7 +78,7 @@ const discoveryValidators = [
   handleValidationErrors
 ];
 
-// Claim Deal Validators
+
 const claimDealValidators = [
   param('deal_id')
     .notEmpty().withMessage('Deal ID is required')
