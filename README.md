@@ -5,6 +5,8 @@ A high‑performance, geolocation‑aware flash sale backend built with **Node.j
 ---
 
 ## Project Structure
+
+```
 shopcardd-flash-sale/
 ├── src/
 │   ├── config/
@@ -31,6 +33,7 @@ shopcardd-flash-sale/
 ├── server.js                    # Application entry point
 └── README.md                    # Project documentation
 
+```
 
 ---
 
