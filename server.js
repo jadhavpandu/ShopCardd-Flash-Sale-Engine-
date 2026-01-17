@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const dealRoutes = require('./routes/dealRoutes');
+const dealRoutes = require('./src/routes/dealRoutes');
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.get('/health', (req, res) => {
 app.use('/api', dealRoutes);
 
 app.get('/test-redis', async (req, res) => {
-  const redis = require('./config/redis');
+  const redis = require('./src/config/redis');
   
   try {
     const ping = await redis.ping();

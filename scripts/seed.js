@@ -2,9 +2,9 @@
 require('dotenv').config({ path: '../.env' });
 
 const mongoose = require('mongoose');
-const Deal = require('../models/Deal');
-const Claim = require('../models/Claim');
-const redis = require('../config/redis');
+const Deal = require('../src/models/Deal');
+const Claim = require('../src/models/Claim');
+const redis = require('../src/config/redis');
 
 
 const sampleDeals = [
