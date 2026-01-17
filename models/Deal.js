@@ -1,4 +1,3 @@
-// models/Deal.js - Deal Schema with Geospatial Index
 const mongoose = require('mongoose');
 
 const dealSchema = new mongoose.Schema({
@@ -52,8 +51,8 @@ const dealSchema = new mongoose.Schema({
       validate: {
         validator: function(coords) {
           return coords.length === 2 && 
-                 coords[0] >= -180 && coords[0] <= 180 && // longitude
-                 coords[1] >= -90 && coords[1] <= 90;     // latitude
+                 coords[0] >= -180 && coords[0] <= 180 && 
+                 coords[1] >= -90 && coords[1] <= 90;     
         },
         message: 'Invalid coordinates format [longitude, latitude]'
       }
@@ -69,18 +68,18 @@ const dealSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-// Indexes
+
 dealSchema.index({ location: '2dsphere' });
 dealSchema.index({ valid_until: 1 });
 dealSchema.index({ merchant_id: 1, valid_until: 1 });
 dealSchema.index({ inventory_remaining: 1, valid_until: 1 });
 
-// Virtual for checking if deal is active
+
 dealSchema.virtual('is_active').get(function() {
   return this.valid_until > new Date() && this.inventory_remaining > 0;
 });
 
-// Static method to find active deals
+
 dealSchema.statics.findActive = function() {
   return this.find({
     valid_until: { $gt: new Date() },
@@ -88,7 +87,7 @@ dealSchema.statics.findActive = function() {
   });
 };
 
-// Static method for geospatial search
+
 dealSchema.statics.findNearby = function(longitude, latitude, radiusInKm, options = {}) {
   return this.find({
     location: {
@@ -97,7 +96,7 @@ dealSchema.statics.findNearby = function(longitude, latitude, radiusInKm, option
           type: 'Point',
           coordinates: [longitude, latitude]
         },
-        $maxDistance: radiusInKm * 1000 // Convert km to meters
+        $maxDistance: radiusInKm * 1000 
       }
     },
     valid_until: { $gt: new Date() },
@@ -106,7 +105,7 @@ dealSchema.statics.findNearby = function(longitude, latitude, radiusInKm, option
   });
 };
 
-// Instance method to check if user has claimed
+
 dealSchema.methods.hasUserClaimed = function(userId) {
   return this.claimed_by.includes(userId);
 };

@@ -1,4 +1,3 @@
-// models/Claim.js - Claim Schema with Voucher Generation
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 
@@ -49,12 +48,12 @@ const claimSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Compound indexes for efficient queries
+
 claimSchema.index({ user_id: 1, deal_id: 1 }, { unique: true });
 claimSchema.index({ merchant_id: 1, status: 1 });
 claimSchema.index({ expires_at: 1 });
 
-// Static method to generate unique voucher code
+
 claimSchema.statics.generateVoucherCode = function(dealId) {
   const timestamp = Date.now().toString(36).toUpperCase();
   const random = crypto.randomBytes(3).toString('hex').toUpperCase();
@@ -63,7 +62,7 @@ claimSchema.statics.generateVoucherCode = function(dealId) {
   return `SHOP-${dealSuffix}-${timestamp}${random}`;
 };
 
-// Static method to create a new claim
+
 claimSchema.statics.createClaim = async function(dealId, userId, merchantId, expiresAt) {
   const voucherCode = this.generateVoucherCode(dealId);
   
@@ -79,7 +78,7 @@ claimSchema.statics.createClaim = async function(dealId, userId, merchantId, exp
   return claim;
 };
 
-// Instance method to redeem voucher
+
 claimSchema.methods.redeem = async function() {
   if (this.status === 'redeemed') {
     throw new Error('Voucher already redeemed');
@@ -96,7 +95,7 @@ claimSchema.methods.redeem = async function() {
   return this;
 };
 
-// Virtual to check if voucher is valid
+
 claimSchema.virtual('is_valid').get(function() {
   return this.status === 'active' && this.expires_at > new Date();
 });
