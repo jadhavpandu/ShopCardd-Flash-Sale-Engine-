@@ -261,16 +261,21 @@ This confirms Redis is actively used for concurrency control and caching.
 <img width="1920" height="1080" alt="health" src="https://github.com/user-attachments/assets/b93ba461-3357-4d7c-9a39-71cfbc07b9c7" />
 
 ## api_deal
-<img width="1920" height="1080" alt="health" src="https://github.com/user-attachments/assets/05c12c43-756e-4e6e-a981-6673a0fa3285" />
+<img width="1145" height="889" alt="API_delas" src="https://github.com/user-attachments/assets/1c01e671-84c4-4f9e-9169-1301403b1f5e" />
+
 
 ## deals in database
-<img width="1920" height="1080" alt="deals" src="https://github.com/user-attachments/assets/ca082e06-7934-4e65-b1ea-aff7abf4c384" />
+<img width="1920" height="1080" alt="deals" src="https://github.com/user-attachments/assets/5a7e0d9f-3de3-4705-aec7-bdc590f5f607" />
 
 
-## api for region to check delas
-<img width="1920" height="1080" alt="health" src="https://github.com/user-attachments/assets/d7474c0e-30d7-42a6-a944-d852eab3d54e" />
+## api for region to check deals
+<img width="1145" height="889" alt="api for specific regin" src="https://github.com/user-attachments/assets/76a8b495-5c82-4ba4-b206-9e3811665c97" />
 
-## api to claim dela
+## api claim offer with in Range of Radius
+<img width="1784" height="974" alt="Claim with in Range of radius" src="https://github.com/user-attachments/assets/2cdbc028-e344-4827-86b5-d5fd321797f9" />
+
+
+## api to claim deal
 <img width="1920" height="1080" alt="Claim" src="https://github.com/user-attachments/assets/b7ec3d66-56ea-494e-9a9c-6f10ba860bcf" />
 
 ## claim database image
