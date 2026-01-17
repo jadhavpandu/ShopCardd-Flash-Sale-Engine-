@@ -5,25 +5,32 @@ A high‑performance, geolocation‑aware flash sale backend built with **Node.j
 ---
 
 ## Project Structure
-
-```
 shopcardd-flash-sale/
-├── config/
-│   ├── database.js          # MongoDB connection
-│   └── redis.js             # Redis client configuration
-├── middleware/
-│   └── validators.js        # Request validation rules
-├── models/
-│   ├── Deal.js              # Deal schema (2dsphere index)
-│   └── Claim.js             # Claim schema & voucher generation
-├── routes/
-│   └── dealRoutes.js        # API routes
-├── .env.example             # Environment variables template
-├── .gitignore
-├── package.json
-├── server.js                # Application entry point
-└── README.md                # Documentation
-```
+├── src/
+│   ├── config/
+│   │   ├── database.js          # MongoDB connection
+│   │   └── redis.js             # Redis client configuration
+│   │
+│   ├── middleware/
+│   │   └── validators.js        # Request validation rules
+│   │
+│   ├── models/
+│   │   ├── Deal.js              # Deal schema (2dsphere index)
+│   │   └── Claim.js             # Claim schema & voucher generation
+│   │
+│   └── routes/
+│       └── dealRoutes.js        # API routes
+│
+├── scripts/
+│   └── seed.js                  # Database seeding script
+│
+├── .env.example                 # Environment variables template
+├── .gitignore                   # Git ignore rules
+├── package.json                 # Project dependencies & scripts
+├── package-lock.json            # Dependency lock file
+├── server.js                    # Application entry point
+└── README.md                    # Project documentation
+
 
 ---
 
