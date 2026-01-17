@@ -1,4 +1,3 @@
-// config/database.js - MongoDB Connection Configuration
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
@@ -15,7 +14,7 @@ const connectDB = async () => {
     
     console.log('MongoDB connected successfully');
     
-    // Connection event listeners
+ 
     mongoose.connection.on('error', (err) => {
       console.error('MongoDB connection error:', err);
     });
