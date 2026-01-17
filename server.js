@@ -1,4 +1,3 @@
-// server.js - Application Entry Point
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -6,11 +5,10 @@ const dealRoutes = require('./routes/dealRoutes');
 
 const app = express();
 
-// Middleware
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'healthy',
@@ -19,10 +17,8 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Routes
 app.use('/api', dealRoutes);
 
-// Redis test endpoint
 app.get('/test-redis', async (req, res) => {
   const redis = require('./config/redis');
   
@@ -57,7 +53,7 @@ app.get('/test-redis', async (req, res) => {
   }
 });
 
-// 404 handler
+
 app.use((req, res) => {
   res.status(404).json({ 
     status: 'fail', 
@@ -65,7 +61,7 @@ app.use((req, res) => {
   });
 });
 
-// Global error handler
+
 app.use((err, req, res, next) => {
   console.error('Global error handler:', err.stack);
   res.status(err.statusCode || 500).json({
@@ -74,25 +70,25 @@ app.use((err, req, res, next) => {
   });
 });
 
-// MongoDB connection
+
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log('✅ Connected to MongoDB');
+    console.log('Connected to MongoDB');
     
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
-      console.log(`🚀 Flash Sale Engine running on port ${PORT}`);
-      console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`Flash Sale Engine running on port ${PORT}`);
+      console.log(` Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   })
   .catch((error) => {
-    console.error('❌ MongoDB connection error:', error);
+    console.error('MongoDB connection error:', error);
     process.exit(1);
   });
 
-// Graceful shutdown
+
 process.on('SIGTERM', async () => {
-  console.log('⚠️  SIGTERM received, shutting down gracefully...');
+  console.log(' SIGTERM received, shutting down gracefully...');
   await mongoose.connection.close();
   process.exit(0);
 });
