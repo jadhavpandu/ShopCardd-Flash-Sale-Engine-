@@ -1,5 +1,4 @@
-// scripts/seed.js - Database Seeder
-// require('dotenv').config();
+
 require('dotenv').config({ path: '../.env' });
 
 const mongoose = require('mongoose');
@@ -7,7 +6,7 @@ const Deal = require('../models/Deal');
 const Claim = require('../models/Claim');
 const redis = require('../config/redis');
 
-// Sample data
+
 const sampleDeals = [
   {
     merchant_id: '123e4567-e89b-12d3-a456-426614174000',
@@ -17,7 +16,7 @@ const sampleDeals = [
     valid_until: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     location: {
       type: 'Point',
-      coordinates: [72.8777, 19.0760] // Mumbai
+      coordinates: [72.8777, 19.0760] 
     }
   },
   {
@@ -28,7 +27,7 @@ const sampleDeals = [
     valid_until: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
     location: {
       type: 'Point',
-      coordinates: [72.8777, 19.0780] // Near Mumbai
+      coordinates: [72.8777, 19.0780] 
     }
   },
   {
@@ -50,7 +49,7 @@ const sampleDeals = [
     valid_until: new Date('2023-12-01T00:00:00Z'),
     location: {
       type: 'Point',
-      coordinates: [77.2090, 28.6139] // Delhi
+      coordinates: [77.2090, 28.6139] 
     }
   },
   {
@@ -68,24 +67,23 @@ const sampleDeals = [
 
 async function seed() {
   try {
-    // Connect to MongoDB
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/flash-sale');
     console.log('Connected to MongoDB');
 
-    // Clear existing data
+
     await Deal.deleteMany({});
     await Claim.deleteMany({});
     console.log('Cleared existing data');
 
-    // Flush Redis
+
     await redis.flushdb();
     console.log('Cleared Redis cache');
 
-    // Insert deals
+  
     const deals = await Deal.insertMany(sampleDeals);
     console.log(`Inserted ${deals.length} deals`);
 
-    // Cache active deals in Redis
+ 
     let cachedCount = 0;
     for (const deal of deals) {
       if (deal.valid_until > new Date()) {
@@ -115,7 +113,7 @@ async function seed() {
     }
     console.log(`Cached ${cachedCount} active deals in Redis`);
 
-    // Summary
+    
     const activeDeals = deals.filter(d => d.valid_until > new Date());
     const expiredDeals = deals.filter(d => d.valid_until <= new Date());
 
