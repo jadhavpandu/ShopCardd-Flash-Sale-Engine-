@@ -1,17 +1,12 @@
-// controllers/dealController.js - Business Logic for Deals
 const mongoose = require('mongoose');
 const Deal = require('../models/Deal');
 const Claim = require('../models/Claim');
 const redis = require('../config/redis');
-
-/**
- * Create a new flash deal
- */
 const createDeal = async (req, res) => {
   try {
     const { merchant_id, title, total_vouchers, valid_until, location } = req.body;
 
-    // Create deal document
+  
     const deal = new Deal({
       merchant_id,
       title,
@@ -26,7 +21,7 @@ const createDeal = async (req, res) => {
 
     await deal.save();
 
-    // Cache deal data in Redis
+    
     const ttl = Math.floor((new Date(valid_until) - Date.now()) / 1000);
     
     if (ttl > 0) {
@@ -71,11 +66,8 @@ const createDeal = async (req, res) => {
   }
 };
 
-/**
- * Calculate distance between two coordinates using Haversine formula
- */
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Earth's radius in km
+  const R = 6371;
   const dLat = toRad(lat2 - lat1);
   const dLon = toRad(lon2 - lon1);
   
@@ -89,9 +81,6 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 
 const toRad = (degrees) => degrees * (Math.PI / 180);
 
-/**
- * Discover nearby deals
- */
 const discoverDeals = async (req, res) => {
   try {
     const { lat, long, radius = 5 } = req.query;
@@ -99,7 +88,6 @@ const discoverDeals = async (req, res) => {
     const longitude = parseFloat(long);
     const radiusKm = parseInt(radius);
 
-    // Check Redis cache
     const cacheKey = `discovery:${latitude}:${longitude}:${radiusKm}`;
     const cached = await redis.get(cacheKey);
     
@@ -111,7 +99,7 @@ const discoverDeals = async (req, res) => {
       });
     }
 
-    // Query MongoDB with geospatial search
+  
     const deals = await Deal.find({
       location: {
         $near: {
@@ -129,7 +117,7 @@ const discoverDeals = async (req, res) => {
     .limit(50)
     .lean();
 
-    // Enrich with distance calculations
+    
     const enrichedDeals = deals.map(deal => {
       const [dealLng, dealLat] = deal.location.coordinates;
       const distance_km = calculateDistance(latitude, longitude, dealLat, dealLng);
@@ -155,7 +143,7 @@ const discoverDeals = async (req, res) => {
       deals: enrichedDeals
     };
 
-    // Cache results for 30 seconds
+   
     await redis.setex(cacheKey, 30, JSON.stringify({
       count: enrichedDeals.length,
       deals: enrichedDeals
@@ -173,9 +161,8 @@ const discoverDeals = async (req, res) => {
   }
 };
 
-/**
- * Claim a deal (race-condition safe)
- */
+
+
 const claimDeal = async (req, res) => {
   const session = await mongoose.startSession();
   
@@ -183,7 +170,7 @@ const claimDeal = async (req, res) => {
     const { deal_id } = req.params;
     const { user_id } = req.body;
 
-    // Redis Lua script for atomic claim operation
+    
     const luaScript = `
       local inventory_key = KEYS[1]
       local claimed_key = KEYS[2]
@@ -207,10 +194,6 @@ const claimDeal = async (req, res) => {
       return 1
     `;
 
-    const inventoryKey = `deal:${deal_id}:inventory`;
-    const claimedKey = `deal:${deal_id}:claimed`;
-
-    // Execute atomic claim in Redis
     const result = await redis.eval(
       luaScript,
       2,
@@ -219,7 +202,7 @@ const claimDeal = async (req, res) => {
       user_id
     );
 
-    // Handle Redis results
+ 
     if (result === -1) {
       return res.status(400).json({
         status: 'fail',
@@ -234,7 +217,7 @@ const claimDeal = async (req, res) => {
       });
     }
 
-    // Update MongoDB with transaction
+    
     await session.withTransaction(async () => {
       const deal = await Deal.findById(deal_id).session(session);
 
@@ -254,12 +237,11 @@ const claimDeal = async (req, res) => {
         throw new Error('Deal expired');
       }
 
-      // Update deal
+   
       deal.inventory_remaining -= 1;
       deal.claimed_by.push(user_id);
       await deal.save({ session });
 
-      // Create claim record
       await Claim.createClaim(
         deal._id,
         user_id,
@@ -268,7 +250,7 @@ const claimDeal = async (req, res) => {
       );
     });
 
-    // Generate voucher code
+
     const voucher_code = Claim.generateVoucherCode(deal_id);
 
     res.status(200).json({
@@ -280,7 +262,6 @@ const claimDeal = async (req, res) => {
   } catch (error) {
     console.error('Error claiming deal:', error);
     
-    // Handle specific errors
     if (error.message === 'Already claimed') {
       return res.status(400).json({
         status: 'fail',
